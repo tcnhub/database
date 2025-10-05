@@ -2,63 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
+use App\Models\Seccion;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function show(Request $request, $slug)
     {
-        //
-    }
+        // Buscar categoría por slug
+        $categoria = Categoria::where('slug', $slug)
+            ->with(['productos', 'children', 'seccion.categorias' => function ($query) {
+                $query->whereNull('categoria_padre_id')->with('children');
+            }])
+            ->firstOrFail();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        // Cargar productos de la categoría (o subcategorías si aplica)
+        $productos = $categoria->productos;
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        // Si es una subcategoría, cargar también productos de la principal
+        if ($categoria->categoria_padre_id) {
+            $categoriaPadre = Categoria::find($categoria->categoria_padre_id);
+            $productos = $productos->merge($categoriaPadre->productos ?? collect());
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        // Todas las secciones para la sidebar
+        $secciones = Seccion::with(['categorias' => function ($query) {
+            $query->whereNull('categoria_padre_id')->with('children');
+        }])->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('categorias.show', compact('categoria', 'productos', 'secciones'));
     }
 }
