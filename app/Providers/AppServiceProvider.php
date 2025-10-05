@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Seccion;
+use Illuminate\Support\Facades\Schema; // Add this line
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         //
 
         // este codigo es para poner disnible las secciones y categorias anidadas en todo el sitio
-
+        if (Schema::hasTable('secciones')) {
         $secciones = Seccion::with([
             'categorias' => function($q) {
                 $q->whereNull('categoria_padre_id')->with('children');
@@ -32,8 +33,7 @@ class AppServiceProvider extends ServiceProvider
         ])->get();
 
         View::share('secciones', $secciones);
-
-
+        }
 
     }
 }

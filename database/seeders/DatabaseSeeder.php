@@ -3,360 +3,121 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Seccion;
-use App\Models\Categoria;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Lista de secciones y categorías basada en el HTML proporcionado, estructurada recursivamente
-        $data = [
-            [
-                'nombre' => 'Computadoras',
-                'categorias' => [
-                    [
-                        'nombre' => 'Computadoras de escritorio',
-                        'children' => [
-                            ['nombre' => 'Computadora Profesional'],
-                            ['nombre' => 'Computadora Gamer'],
-                            ['nombre' => 'Computadora Todo en Uno'],
-                            ['nombre' => 'Computadora Workstation'],
-                        ],
-                    ],
-                    [
-                        'nombre' => 'Computadoras Portátiles',
-                        'children' => [
-                            ['nombre' => 'Laptop'],
-                            ['nombre' => 'Laptop Gamer Cusco'],
-                            ['nombre' => 'Laptop Dos en Uno'],
-                            ['nombre' => 'Laptop Workstation'],
-                        ],
-                    ],
-                    [
-                        'nombre' => 'Otros Ordenadores',
-                        'children' => [
-                            ['nombre' => 'Servidores'],
-                            ['nombre' => 'Mini PCs'],
-                            ['nombre' => 'Tablet Android'],
-                            ['nombre' => 'Tablet iOS'],
-                            ['nombre' => 'Tableta Gráfica'],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'nombre' => 'Impresoras',
-                'categorias' => [
-                    [
-                        'nombre' => 'Multifunción',
-                        'children' => [
-                            ['nombre' => 'Impresora Multifuncional Tinta'],
-                            ['nombre' => 'Impresora Multifuncional Láser'],
-                        ],
-                    ],
-                    [
-                        'nombre' => 'Impresora',
-                        'children' => [
-                            ['nombre' => 'Impresora Láser'],
-                            ['nombre' => 'Impresora de Tinta'],
-                        ],
-                    ],
-                    [
-                        'nombre' => 'Impresora Varios',
-                        'children' => [
-                            ['nombre' => 'Impresora Térmica'],
-                            ['nombre' => 'Impresora de Etiquetas'],
-                            ['nombre' => 'Impresora de Tarjetas'],
-                            ['nombre' => 'Escáneres'],
-                            ['nombre' => 'Plotters'],
-                            ['nombre' => 'Suministros'],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'nombre' => 'Monitores',
-                'categorias' => [
-                    [
-                        'nombre' => 'Monitores',
-                        'children' => [
-                            ['nombre' => 'Monitor Touch'],
-                            ['nombre' => 'Monitores de LED 32" - 40"'],
-                            ['nombre' => 'Monitores Gaming'],
-                            ['nombre' => 'Monitores LED 61" - 70"'],
-                            ['nombre' => 'Monitores Pivot'],
-                            ['nombre' => 'Monitores TFT 15" - 19"'],
-                            ['nombre' => 'Monitores TFT 20" - 23"'],
-                            ['nombre' => 'Monitores TFT 24" - 28"'],
-                            ['nombre' => 'Monitores TFT 29", 32", 34" +'],
-                            ['nombre' => 'Pizarras Interactivas'],
-                            ['nombre' => 'Televisores'],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'nombre' => 'Partes',
-                'categorias' => [
-                    [
-                        'nombre' => 'CPU',
-                        'children' => [
-                            ['nombre' => 'Procesador AMD Ryzen 3'],
-                            ['nombre' => 'Procesador AMD Ryzen 5'],
-                            ['nombre' => 'Procesador AMD Ryzen 7'],
-                            ['nombre' => 'Procesador AMD Ryzen 9'],
-                            ['nombre' => 'Procesador Intel Core i3'],
-                            ['nombre' => 'Procesador Intel Core i5'],
-                            ['nombre' => 'Procesador Intel Core i7'],
-                            ['nombre' => 'Procesador Intel Core i9'],
-                        ],
-                    ],
-                    [
-                        'nombre' => 'Memorias',
-                        'children' => [
-                            ['nombre' => 'Memoria RAM'],
-                            ['nombre' => 'Memoria SD, Micro SD'],
-                            ['nombre' => 'Memoria USB, USB-C'],
-                        ],
-                    ],
-                    [
-                        'nombre' => 'Unidades Sólidas',
-                        'children' => [
-                            ['nombre' => 'Disco Sólido Externo (SSD)'],
-                            ['nombre' => 'SSD 2.5 SATA'],
-                            ['nombre' => 'SSD Accesorios, Otros'],
-                            ['nombre' => 'SSD M.2 NVMe'],
-                            ['nombre' => 'SSD M.2 SATA'],
-                        ],
-                    ],
-                    [
-                        'nombre' => 'Discos Duros',
-                        'children' => [
-                            ['nombre' => 'Disco Duro 3.5" SATA'],
-                            ['nombre' => 'Disco Duro Externo 2.5"'],
-                            ['nombre' => 'Disco Duro Externo 3.5"'],
-                            ['nombre' => 'Disco Duro para Notebook SATA'],
-                            ['nombre' => 'Disco Duro Propietario'],
-                        ],
-                    ],
-                    [
-                        'nombre' => 'Placas Madre',
-                        'children' => [
-                            ['nombre' => 'MB AM4 AMD'],
-                            ['nombre' => 'MB AM4 AMD Gaming'],
-                            ['nombre' => 'MB AM5 AMD'],
-                            ['nombre' => 'MB AM5 AMD Gaming'],
-                            ['nombre' => 'MB CI7 S1200'],
-                            ['nombre' => 'MB CI7 S1200 Gaming'],
-                            ['nombre' => 'MB CI9 S1700 DDR4'],
-                            ['nombre' => 'MB CI9 S1700 DDR4 Gaming'],
-                            ['nombre' => 'MB CI9 S1700 DDR5'],
-                            ['nombre' => 'MB CI9 S1700 DDR5 Gaming'],
-                        ],
-                    ],
-                    [
-                        'nombre' => 'Cases',
-                        'children' => [
-                            ['nombre' => 'Case para Discos HDD/SSD'],
-                            ['nombre' => 'Cases ATX Slim'],
-                            ['nombre' => 'Cases ATX Ver2.0'],
-                            ['nombre' => 'Cases con Fuente para Gamers'],
-                            ['nombre' => 'Cases Micro ATX'],
-                            ['nombre' => 'Cases sin Fuente para Gamers'],
-                            ['nombre' => 'Fuente para Case Gaming'],
-                            ['nombre' => 'Fuente para Cases'],
-                        ],
-                    ],
-                    [
-                        'nombre' => 'Tarjetas de Video',
-                        'children' => [
-                            ['nombre' => 'PCI Express NVIDIA Gaming'],
-                            ['nombre' => 'PCI Express Radeon Gaming'],
-                            ['nombre' => 'PCI Express NVIDIA'],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'nombre' => 'Electrónica',
-                'categorias' => [
-                    [
-                        'nombre' => 'Electrónica',
-                        'children' => [
-                            ['nombre' => 'Baterías para Laptop'],
-                            ['nombre' => 'Baterías para UPS'],
-                            ['nombre' => 'Cables y Adaptadores'],
-                            ['nombre' => 'Cámaras de Vigilancia'],
-                            ['nombre' => 'Cámaras Fotográficas y de Video'],
-                            ['nombre' => 'Cargadores de Laptop'],
-                            ['nombre' => 'Estabilizadores'],
-                            ['nombre' => 'Fuentes de Poder'],
-                            ['nombre' => 'Proyectores'],
-                            ['nombre' => 'UPS'],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'nombre' => 'Software',
-                'categorias' => [
-                    [
-                        'nombre' => 'Software',
-                        'children' => [
-                            ['nombre' => 'Antivirus'],
-                            ['nombre' => 'Office'],
-                            ['nombre' => 'Office 365'],
-                            ['nombre' => 'Windows Business'],
-                            ['nombre' => 'Windows Consumer'],
-                            ['nombre' => 'Windows Server'],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'nombre' => 'Gamer',
-                'categorias' => [
-                    [
-                        'nombre' => 'Gamer',
-                        'children' => [
-                            ['nombre' => 'Auriculares'],
-                            ['nombre' => 'Mouse'],
-                            ['nombre' => 'Pad Mouse'],
-                            ['nombre' => 'Silla Gamer'],
-                            ['nombre' => 'Teclados'],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'nombre' => 'Audio',
-                'categorias' => [
-                    [
-                        'nombre' => 'Audio',
-                        'children' => [
-                            ['nombre' => 'Auriculares'],
-                            ['nombre' => 'Mouse'],
-                            ['nombre' => 'Pad Mouse'],
-                            ['nombre' => 'Silla Gamer'],
-                            ['nombre' => 'Teclados'],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'nombre' => 'Red',
-                'categorias' => [
-                    [
-                        'nombre' => 'Red',
-                        'children' => [
-                            ['nombre' => 'Auriculares'],
-                            ['nombre' => 'Mouse'],
-                            ['nombre' => 'Pad Mouse'],
-                            ['nombre' => 'Silla Gamer'],
-                            ['nombre' => 'Teclados'],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'nombre' => 'Puntos de Venta',
-                'categorias' => [
-                    [
-                        'nombre' => 'Puntos de Venta y POS',
-                        'children' => [
-                            ['nombre' => 'Auriculares'],
-                            ['nombre' => 'Mouse'],
-                            ['nombre' => 'Pad Mouse'],
-                            ['nombre' => 'Silla Gamer'],
-                            ['nombre' => 'Teclados'],
-                        ],
-                    ],
-                ],
-            ],
-            [
-                'nombre' => 'Accesorios',
-                'categorias' => [
-                    [
-                        'nombre' => 'Accesorios',
-                        'children' => [
-                            ['nombre' => 'Auriculares'],
-                            ['nombre' => 'Base para Portátil'],
-                            ['nombre' => 'Cámaras Web'],
-                            ['nombre' => 'Ecran'],
-                            ['nombre' => 'Mochilas y Fundas'],
-                            ['nombre' => 'Mouse'],
-                            ['nombre' => 'Otros'],
-                            ['nombre' => 'Parlantes'],
-                            ['nombre' => 'Rack'],
-                            ['nombre' => 'Smartwatch'],
-                            ['nombre' => 'Teclados'],
-                        ],
-                    ],
-                ],
-            ],
-        ];
+        $this->call([
+            SeccionesCategoriasSeeder::class,
+        ]);
 
-        // Crear secciones y categorías recursivamente
-        foreach ($data as $seccionData) {
-            // Crear o obtener sección existente usando firstOrCreate para evitar duplicados
-            $seccion = Seccion::firstOrCreate(
-                ['slug' => Str::slug($seccionData['nombre'])],
-                [
-                    'nombre' => $seccionData['nombre'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            );
+        /*
+        DB::table('productos')->insert([
+            ['id' => 1, 'nombre' => 'Laptop Lenovo ThinkPad X1', 'slug' => 'laptop-lenovo-thinkpad-x1', 'seccion_id' => 1, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'nombre' => 'Computadora HP Pavilion', 'slug' => 'computadora-hp-pavilion', 'seccion_id' => 1, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 3, 'nombre' => 'Laptop Gamer ASUS ROG', 'slug' => 'laptop-gamer-asus-rog', 'seccion_id' => 1, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 4, 'nombre' => 'Impresora Laser HP', 'slug' => 'impresora-laser-hp', 'seccion_id' => 2, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 5, 'nombre' => 'Impresora Multifuncional Canon', 'slug' => 'impresora-multifuncional-canon', 'seccion_id' => 2, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
 
-            // Crear categorías de manera recursiva empezando desde nivel 1
-            $this->createCategorias($seccionData['categorias'], $seccion->id, null, 1);
-        }
+        DB::table('producto_categoria')->insert([
+            ['id' => 1, 'producto_id' => 1, 'categoria_id' => 8, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'producto_id' => 2, 'categoria_id' => 4, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 3, 'producto_id' => 3, 'categoria_id' => 9, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 4, 'producto_id' => 4, 'categoria_id' => 13, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 5, 'producto_id' => 5, 'categoria_id' => 14, 'created_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('producto_valor_atributo')->insert([
+            ['id' => 1, 'producto_id' => 1, 'valor_atributo_id' => 6, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'producto_id' => 1, 'valor_atributo_id' => 10, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 3, 'producto_id' => 1, 'valor_atributo_id' => 17, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 4, 'producto_id' => 1, 'valor_atributo_id' => 25, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 5, 'producto_id' => 2, 'valor_atributo_id' => 5, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 6, 'producto_id' => 2, 'valor_atributo_id' => 11, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 7, 'producto_id' => 2, 'valor_atributo_id' => 18, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 8, 'producto_id' => 2, 'valor_atributo_id' => 24, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 9, 'producto_id' => 4, 'valor_atributo_id' => 27, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 10, 'producto_id' => 4, 'valor_atributo_id' => 29, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 11, 'producto_id' => 5, 'valor_atributo_id' => 26, 'created_at' => '2025-09-30 18:59:00'],
+            ['id' => 12, 'producto_id' => 5, 'valor_atributo_id' => 30, 'created_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('product_variants')->insert([
+            ['id' => 1, 'product_id' => 1, 'nombre' => 'ThinkPad X1 16GB', 'precio_adicional' => 200.00, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'product_id' => 4, 'nombre' => 'HP Laser Pro', 'precio_adicional' => 50.00, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('inventarios')->insert([
+            ['id' => 1, 'producto_id' => 1, 'stock' => 48, 'stock_minimo' => 5, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'producto_id' => 2, 'stock' => 30, 'stock_minimo' => 3, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 3, 'producto_id' => 3, 'stock' => 20, 'stock_minimo' => 2, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 4, 'producto_id' => 4, 'stock' => 39, 'stock_minimo' => 4, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 5, 'producto_id' => 5, 'stock' => 25, 'stock_minimo' => 3, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('users')->insert([
+            ['id' => 1, 'nombre' => 'Juan Pérez', 'email' => 'juan.perez@example.com', 'password' => 'hashed_password_123', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'nombre' => 'María López', 'email' => 'maria.lopez@example.com', 'password' => 'hashed_password_456', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('user_addresses')->insert([
+            ['id' => 1, 'user_id' => 1, 'direccion' => 'Calle Falsa 123', 'ciudad' => 'Ciudad de México', 'pais' => 'México', 'codigo_postal' => '01000', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'user_id' => 2, 'direccion' => 'Avenida Siempre Viva 456', 'ciudad' => 'Guadalajara', 'pais' => 'México', 'codigo_postal' => '44100', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('carts')->insert([
+            ['id' => 1, 'user_id' => null, 'fecha_creacion' => '2025-09-30 18:59:00', 'estado' => 'activo', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'user_id' => 1, 'fecha_creacion' => '2025-09-30 18:59:00', 'estado' => 'convertido', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('cart_items')->insert([
+            ['id' => 1, 'cart_id' => 1, 'product_id' => 1, 'variant_id' => 1, 'cantidad' => 2, 'precio_unitario' => 1400.00, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'cart_id' => 2, 'product_id' => 4, 'variant_id' => 2, 'cantidad' => 1, 'precio_unitario' => 350.00, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('coupons')->insert([
+            ['id' => 1, 'codigo' => 'DESC10', 'descuento_tipo' => 'porcentaje', 'descuento_valor' => 10.00, 'fecha_inicio' => '2025-09-30 18:59:00', 'fecha_fin' => '2025-12-31 23:59:59', 'uso_maximo' => 100, 'uso_por_usuario' => 1, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'codigo' => 'FIX50', 'descuento_tipo' => 'fijo', 'descuento_valor' => 50.00, 'fecha_inicio' => '2025-09-30 18:59:00', 'fecha_fin' => '2025-10-31 23:59:59', 'uso_maximo' => 50, 'uso_por_usuario' => 1, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('orders')->insert([
+            ['id' => 1, 'user_id' => 1, 'direccion_envio_id' => 1, 'estado' => 'pagado', 'total' => 2800.00, 'metodo_pago' => 'tarjeta', 'fecha_creacion' => '2025-09-30 18:59:00', 'fecha_actualizacion' => '2025-09-30 18:59:00', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'user_id' => null, 'direccion_envio_id' => null, 'estado' => 'pendiente', 'total' => 350.00, 'metodo_pago' => 'paypal', 'fecha_creacion' => '2025-09-30 18:59:00', 'fecha_actualizacion' => '2025-09-30 18:59:00', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('order_items')->insert([
+            ['id' => 1, 'order_id' => 1, 'product_id' => 1, 'variant_id' => 1, 'cantidad' => 2, 'precio_unitario' => 1400.00, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'order_id' => 2, 'product_id' => 4, 'variant_id' => 2, 'cantidad' => 1, 'precio_unitario' => 350.00, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('payments')->insert([
+            ['id' => 1, 'order_id' => 1, 'metodo' => 'tarjeta', 'estado' => 'aprobado', 'monto' => 2800.00, 'transaccion_externa_id' => 'TXN-123456', 'fecha' => '2025-09-30 18:59:00', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'order_id' => 2, 'metodo' => 'paypal', 'estado' => 'pendiente', 'monto' => 350.00, 'transaccion_externa_id' => 'TXN-789012', 'fecha' => '2025-09-30 18:59:00', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('invoices')->insert([
+            ['id' => 1, 'order_id' => 1, 'numero_factura' => 'INV-0001', 'pdf_url' => 'https://example.com/invoices/inv-0001.pdf', 'fecha_emision' => '2025-09-30 18:59:00', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('shipments')->insert([
+            ['id' => 1, 'order_id' => 1, 'transportista' => 'DHL', 'numero_guia' => 'TRK-123456789', 'estado' => 'en_transito', 'fecha_envio' => '2025-09-30 18:59:00', 'fecha_entrega' => null, 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('reviews')->insert([
+            ['id' => 1, 'product_id' => 1, 'user_id' => 1, 'rating' => 5, 'comentario' => 'Excelente laptop, muy rápida.', 'fecha' => '2025-09-30 18:59:00', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'product_id' => 4, 'user_id' => 2, 'rating' => 4, 'comentario' => 'Buena impresora, pero el toner es caro.', 'fecha' => '2025-09-30 18:59:00', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+
+        DB::table('wishlists')->insert([
+            ['id' => 1, 'user_id' => 1, 'product_id' => 3, 'fecha' => '2025-09-30 18:59:00', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+            ['id' => 2, 'user_id' => 2, 'product_id' => 5, 'fecha' => '2025-09-30 18:59:00', 'created_at' => '2025-09-30 18:59:00', 'updated_at' => '2025-09-30 18:59:00'],
+        ]);
+        */
+
+
     }
-
-    /**
-     * Función recursiva para crear categorías y sus subcategorías.
-     *
-     * @param array $categoriasData Datos de categorías (puede tener 'children' para subcategorías)
-     * @param int $seccionId ID de la sección
-     * @param int|null $parentId ID de la categoría padre (null para nivel 1)
-     * @param int $nivel Nivel actual de la categoría
-     */
-    private function createCategorias(array $categoriasData, int $seccionId, ?int $parentId, int $nivel): void
-    {
-        foreach ($categoriasData as $categoriaData) {
-            $baseSlug = Str::slug($categoriaData['nombre']);
-            $slug = $baseSlug;
-            $counter = 1;
-
-            // Asegurar slug único para categorías
-            while (Categoria::where('slug', $slug)->exists()) {
-                $slug = $baseSlug . '-' . $counter;
-                $counter++;
-            }
-
-            // Crear o obtener categoría existente usando firstOrCreate
-            $categoria = Categoria::firstOrCreate(
-                ['slug' => $slug],
-                [
-                    'nombre' => $categoriaData['nombre'],
-                    'seccion_id' => $seccionId,
-                    'categoria_padre_id' => $parentId,
-                    'nivel' => $nivel,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            );
-
-            // Si hay children (subcategorías), llamar recursivamente con nivel +1
-            if (isset($categoriaData['children']) && is_array($categoriaData['children'])) {
-                $this->createCategorias($categoriaData['children'], $seccionId, $categoria->id, $nivel + 1);
-            }
-        }
-
-        $this->call(ProductosSeeder::class);
-    }
-
 
 }
