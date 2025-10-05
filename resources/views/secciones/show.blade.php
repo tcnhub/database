@@ -19,7 +19,7 @@
                                     <ul class="ml-4 mt-2 space-y-1">
                                         @foreach ($sec->categorias as $cat)
                                             <li>
-                                                <a href="{{ route('secciones.show', [$sec->slug, 'categorias' => $cat->slug]) }}"
+                                                <a href="{{ route('secciones.show', $cat) }}"
                                                    class="text-gray-700 hover:text-blue-600">
                                                     {{ $cat->nombre }}
                                                 </a>
@@ -27,7 +27,7 @@
                                                     <ul class="ml-4 mt-1 space-y-1">
                                                         @foreach ($cat->children as $subcat)
                                                             <li>
-                                                                <a href="{{ route('secciones.show', [$sec->slug, 'categorias' => $subcat->slug]) }}"
+                                                                <a href="{{ route('secciones.show', $subcat]) }}"
                                                                    class="text-gray-600 hover:text-blue-600 text-sm">
                                                                     {{ $subcat->nombre }}
                                                                 </a>

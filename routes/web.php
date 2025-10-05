@@ -12,5 +12,5 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::resource('secciones', SeccionController::class)->parameters(['secciones' => 'seccion_individual']);
 Route::resource('productos', ProductoController::class)->parameters(['productos' => 'producto']);
-Route::resource('categorias', ProductoController::class)->parameters(['categorias' => 'categoria']);
+Route::resource('categorias', CategoriaController::class)->parameters(['categorias' => 'categoria']);
 
