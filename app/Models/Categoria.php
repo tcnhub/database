@@ -31,6 +31,10 @@ class Categoria extends Model
         return $this->hasMany(Categoria::class, 'categoria_padre_id')->with('children');
     }
 
+    public function productos()
+    {
+        return $this->hasMany(Producto::class, 'seccion_id');
+    }
 
     public function getRouteKeyName()
     {

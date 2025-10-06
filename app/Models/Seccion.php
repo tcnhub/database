@@ -31,10 +31,6 @@ class Seccion extends Model
         return $this->hasMany(Producto::class, 'seccion_id');
     }
 
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
 
     public function atributos()
     {
@@ -42,4 +38,8 @@ class Seccion extends Model
     }
 
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }

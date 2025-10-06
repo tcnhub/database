@@ -27,7 +27,7 @@
                                                     <ul class="ml-4 mt-1 space-y-1">
                                                         @foreach ($cat->children as $subcat)
                                                             <li>
-                                                                <a href="{{ route('secciones.show', $subcat]) }}"
+                                                                <a href="{{ route('secciones.show', $subcat) }}"
                                                                    class="text-gray-600 hover:text-blue-600 text-sm">
                                                                     {{ $subcat->nombre }}
                                                                 </a>
