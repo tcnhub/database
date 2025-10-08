@@ -36,8 +36,12 @@
                                         data-bs-parent="#accordionSecciones">
                                         <div class="accordion-body py-2">
 
-                                            {{-- 🔹 Atributos dentro de la sección --}}
-                                            @forelse($seccion->atributos as $atributo)
+                                            {{-- 🔹 Atributos dentro de la sección (solo si tienen valores) --}}
+                                            @php
+                                                $atributosConValores = $seccion->atributos->filter(fn($a) => $a->valores->count() > 0);
+                                            @endphp
+
+                                            @forelse($atributosConValores as $atributo)
                                                 <div class="mb-3">
                                                     <strong class="d-block mb-1">{{ $atributo->nombre }}</strong>
                                                     <ul class="list-unstyled">
@@ -59,7 +63,7 @@
                                                     </ul>
                                                 </div>
                                             @empty
-                                                <p class="text-muted small mb-0">No hay atributos en esta sección.</p>
+                                                <p class="text-muted small mb-0">No hay atributos con valores en esta sección.</p>
                                             @endforelse
 
                                         </div>

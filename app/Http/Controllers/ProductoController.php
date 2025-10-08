@@ -111,7 +111,8 @@ class ProductoController extends Controller
         //
     }
 
-    public function filtrar(Request $request)
+
+    /* public function filtrar(Request $request)
     {
         $filtros = $request->input('filtros', []);
 
@@ -139,4 +140,52 @@ class ProductoController extends Controller
         return view('productos.partials.lista', compact('productos', 'productos_sidebar', 'secciones'))->render();
 
     }
+    */
+
+    public function filtrar(Request $request)
+    {
+        $filtros = $request->input('filtros', []);
+        $query = Producto::query();
+
+        /**
+         * 🔹 Si se envía el ID de sección desde la vista (por ejemplo, en categorias/show)
+         * filtramos por esa sección.
+         */
+        if ($request->filled('seccion_id')) {
+            $query->where('seccion_id', $request->seccion_id);
+        }
+
+        /**
+         * 🔹 Aplicar filtros por atributos seleccionados (tipo AND)
+         * Solo se mostrarán productos que cumplan con todos los atributos elegidos.
+         */
+        foreach ($filtros as $slug => $valoresSeleccionados) {
+            $query->whereHas('valoresAtributos', function ($q) use ($slug, $valoresSeleccionados) {
+                $q->whereHas('atributo', function ($qa) use ($slug) {
+                    $qa->where('slug', $slug);
+                })
+                    ->whereIn('valor', $valoresSeleccionados);
+            });
+        }
+
+        /**
+         * 🔹 Cargar relaciones necesarias (valores de atributos y atributo padre)
+         */
+        $productos = $query
+            ->with(['valoresAtributos.atributo', 'seccion'])
+            ->get();
+
+        /**
+         * 🔹 Para el sidebar de filtros seccionado (mantiene tu estructura existente)
+         */
+        $productos_sidebar = Producto::with('valoresAtributos.atributo')->get();
+        $secciones = Seccion::with('atributos.valores')->get();
+
+        /**
+         * 🔹 Devolver solo la lista parcial (para AJAX)
+         */
+        return view('productos.partials.lista', compact('productos', 'productos_sidebar', 'secciones'))->render();
+    }
+
+
 }

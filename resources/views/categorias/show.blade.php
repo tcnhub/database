@@ -9,6 +9,38 @@
 
                     <hr>
 
+                    <h5 class="mb-3 text-primary">Filtrar por atributos</h5>
+
+                    <form id="filtros-form">
+                        @csrf
+                        <input type="hidden" name="seccion_id" value="{{ $categoria->seccion_id }}">
+
+                        @forelse($atributos as $atributo)
+                            <div class="mb-3">
+                                <strong>{{ $atributo->nombre }}</strong>
+                                <ul class="list-unstyled">
+                                    @foreach($atributo->valores as $valor)
+                                        <li class="form-check mb-1">
+                                            <input
+                                                type="checkbox"
+                                                name="filtros[{{ $atributo->slug }}][]"
+                                                value="{{ $valor->valor }}"
+                                                class="form-check-input filtro-checkbox"
+                                                id="{{ $atributo->slug }}-{{ $loop->index }}">
+                                            <label for="{{ $atributo->slug }}-{{ $loop->index }}" class="form-check-label">
+                                                {{ $valor->valor }}
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @empty
+                            <p class="text-muted small">No hay filtros disponibles para esta categoría.</p>
+                        @endforelse
+                    </form>
+
+                    <hr>
+
                     <!-- En categorias/show.blade.php, agrega un sidebar de filtros -->
                     <aside>
                         <h3>Filtros por Atributos</h3>
@@ -77,31 +109,43 @@
 
             {{-- Contenido principal --}}
             <div class="col-md-9">
-                <div class="shadow p-3 bg-white rounded">
-                    <h1 class="mb-4">Productos en {{ $categoria->nombre }} ({{ $categoria->seccion->nombre }})</h1>
-                    <div class="row">
-                        @forelse ($productos as $producto)
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ $producto->nombre }}</h5>
-                                        <p class="card-text text-muted">Slug: {{ $producto->slug }}</p>
-                                        <a href="{{ route('productos.show', $producto->slug) }}" class="btn btn-primary btn-sm">
-                                            Ver Producto
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="alert alert-info">
-                                No hay productos en esta categoría.
-                            </div>
-                        @endforelse
-                    </div>
+                <div class="shadow p-3 my-5 bg-white rounded">
+                    <h4 class="mb-3">{{ $categoria->nombre }}</h4>
 
+                    <div id="productos-lista">
+                        @include('productos.partials.lista', ['productos' => $productos])
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
 @endsection
+
+
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.filtro-checkbox').forEach(chk => {
+                chk.addEventListener('change', aplicarFiltros);
+            });
+
+            function aplicarFiltros() {
+                const form = document.getElementById('filtros-form');
+                const formData = new FormData(form);
+
+                fetch("{{ route('productos.filtrar') }}", {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('productos-lista').innerHTML = html;
+                    })
+                    .catch(err => console.error(err));
+            }
+        });
+    </script>
+@endsection
+
