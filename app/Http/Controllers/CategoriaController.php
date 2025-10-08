@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Atributo;
 use App\Models\Categoria;
 use App\Models\Seccion;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
 {
-    public function show(Request $request, $slug)
+    public function show(Request $request, $slug, Categoria $categoria)
     {
         // Buscar categoría por slug
         $categoria = Categoria::where('slug', $slug)
@@ -31,6 +32,13 @@ class CategoriaController extends Controller
             $query->whereNull('categoria_padre_id')->with('children');
         }])->get();
 
-        return view('categorias.show', compact('categoria', 'productos', 'secciones'));
+        $atributos = Atributo::where('seccion_id', $categoria->seccion_id)->with('valores')->get();
+        // Pasa a la vista para sidebar de filtros
+
+
+
+        
+
+        return view('categorias.show', compact('categoria', 'productos', 'secciones', 'atributos'));
     }
 }

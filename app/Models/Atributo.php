@@ -32,6 +32,10 @@ class Atributo extends Model
     {
         return $this->hasMany(ValorAtributo::class, 'atributo_id');
     }
+    public function valores()
+    {
+        return $this->hasMany(ValorAtributo::class, 'atributo_id');
+    }
 
     /**
      * Relación hasManyThrough con Producto (a través de valores_atributos y producto_valor_atributo)

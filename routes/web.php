@@ -15,3 +15,5 @@ Route::resource('secciones', SeccionController::class)->parameters(['secciones' 
 Route::resource('productos', ProductoController::class)->parameters(['productos' => 'producto']);
 Route::resource('categorias',   CategoriaController::class)->parameters(['categorias' => 'categoria']);
 
+// filtro para la busqueda en ajax
+Route::post('/productos/filtrar', [ProductoController::class, 'filtrar'])->name('productos.filtrar');

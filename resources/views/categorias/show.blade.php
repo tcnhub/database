@@ -1,84 +1,107 @@
 @extends('layouts.app')
 @section('content')
 
-    <div class="container">
+    <div class="container my-5">
         <div class="row">
+            {{-- Sidebar de secciones y categorías --}}
             <div class="col-md-3">
-                <div class="shadow p-3 my-5 bg-white rounded">
+                <div class="shadow p-3 bg-white rounded">
 
-                    <ul class="list-group list-group-flush">
+                    <hr>
+
+                    <!-- En categorias/show.blade.php, agrega un sidebar de filtros -->
+                    <aside>
+                        <h3>Filtros por Atributos</h3>
+                        @foreach($atributos as $atributo)
+                            <b>{{ $atributo->nombre }}</b>
+                            <ul>
+                                @foreach($atributo->valores as $valor)
+                                    <li><a href="{{ route('productos.index', ['filtro' => $atributo->slug . '=' . $valor->valor]) }}">{{ $valor->valor }}</a></li>
+                                @endforeach
+                            </ul>
+                        @endforeach
+                    </aside>
+
+                    <aside>
+                        <h3>Filtros por Atributos</h3>
+                        @foreach($atributos as $atributo)
+                            <b>{{ $atributo->nombre }}</b>
+                            <ul>
+                                @foreach($atributo->valores as $valor)
+                                    <li>
+                                        <a href="{{ route('productos.index', ['filtro' => $atributo->slug . '=' . $valor->valor,'categoria_id' => $categoria->id]) }}">
+                                            {{ $valor->valor }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endforeach
+                    </aside>
+
+
+                    <ul>
                         @foreach ($secciones as $sec)
-                            <li class="list-group-item">
-                                <a href="{{ route('secciones.show', $sec) }}"
-                                   class="text-dark {{ $sec->id === $categoria->seccion_id ? 'fw-bold text-primary' : '' }}">
+                            <li>
+                                <a href="{{ route('secciones.show', $sec) }}">
                                     {{ $sec->nombre }}
                                 </a>
-                                @if ($sec->categorias->isNotEmpty())
-                                    <ul class="list-group list-group-flush ms-3 mt-2">
-                                        @foreach ($sec->categorias as $cat)
-                                            <li class="list-group-item border-0">
-                                                <a href="{{ route('categorias.show', $cat) }}"
-                                                   class="{{ $cat->id === $categoria->id ? 'text-primary' : 'text-dark' }}">
-                                                    {{ $cat->nombre }}
-                                                </a>
-                                                @if ($cat->children->isNotEmpty())
-                                                    <ul class="list-group list-group-flush ms-3">
-                                                        @foreach ($cat->children as $subcat)
-                                                            <li class="list-group-item border-0">
-                                                                <a href="{{ route('categorias.show', $subcat) }}"
-                                                                   class="{{ $subcat->id === $categoria->id ? 'text-primary' : 'text-dark' }} small">
-                                                                    {{ $subcat->nombre }}
-                                                                </a>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                @endif
-                                            </li>
-                                        @endforeach
+                                @foreach ($sec->categorias as $cat)
+                                    <ul>
+                                        <li>
+                                            <a href="{{ route('categorias.show', $cat) }}">
+                                                {{ $cat->nombre }}
+                                            </a>
+                                            @foreach ($cat->children as $subcat)
+                                                <ul>
+                                                    <li>
+                                                        <a href="{{ route('categorias.show', $subcat) }}">
+                                                            {{ $subcat->nombre }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            @endforeach
+                                        </li>
                                     </ul>
-                                @endif
+                                @endforeach
                             </li>
                         @endforeach
                     </ul>
 
+
+
+
                     <hr>
                     @include('partials.secciones')
                 </div>
-
             </div>
-            <div class="col-md-9">
-                <div class="shadow p-3 my-5 bg-white rounded">
-                    <div class="lista_de_propductos_dentro_de_una_seccion">
 
-                        <h1 class="mb-4">Productos en {{ $categoria->nombre }} ({{ $categoria->seccion->nombre }})</h1>
-                        @if ($productos->isNotEmpty())
-                            <div class="row">
-                                @foreach ($productos as $producto)
-                                    <div class="col-md-4 mb-4">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <h5 class="card-title">{{ $producto->nombre }}</h5>
-                                                <p class="card-text text-muted">Slug: {{ $producto->slug }}</p>
-                                                <a href="{{ route('productos.show', $producto->slug) }}" class="btn btn-primary btn-sm">
-                                                    Ver Producto
-                                                </a>
-                                            </div>
-                                        </div>
+            {{-- Contenido principal --}}
+            <div class="col-md-9">
+                <div class="shadow p-3 bg-white rounded">
+                    <h1 class="mb-4">Productos en {{ $categoria->nombre }} ({{ $categoria->seccion->nombre }})</h1>
+                    <div class="row">
+                        @forelse ($productos as $producto)
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $producto->nombre }}</h5>
+                                        <p class="card-text text-muted">Slug: {{ $producto->slug }}</p>
+                                        <a href="{{ route('productos.show', $producto->slug) }}" class="btn btn-primary btn-sm">
+                                            Ver Producto
+                                        </a>
                                     </div>
-                                @endforeach
+                                </div>
                             </div>
-                        @else
+                        @empty
                             <div class="alert alert-info">
                                 No hay productos en esta categoría.
                             </div>
-                        @endif
-
-
-                        Columna General
+                        @endforelse
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>
+
 @endsection

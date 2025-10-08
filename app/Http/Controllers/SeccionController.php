@@ -44,6 +44,8 @@ class SeccionController extends Controller
             }
         ])->get();
 
+        $seccion_individual->load('categorias.children'); // Carga categorías y subcategorías
+
 
         return view('secciones.show', compact('seccion_individual', 'secciones'));
     }

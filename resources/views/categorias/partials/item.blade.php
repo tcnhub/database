@@ -1,5 +1,5 @@
 <li>
-    <a href="{{ $categoria->slug }}">{{ $categoria->nombre }}</a>
+    <a href="{{ route('categorias.show', $categoria) }}">{{ $categoria->nombre }}</a>
 
     @if ($categoria->children->count())
         <ul>
